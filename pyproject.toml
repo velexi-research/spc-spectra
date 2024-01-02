@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "spc-spectra"
 version = "0.5.0"
-description = ""
-license = "Apache-2.0"
+description = "Python package for reading spectroscopic data stored in the SPC file format"
+license = "GPL-3.0-or-later"
 readme = "README.md"
 authors = [
-    "Rohan Isaac",
+    "Rohan Isaac <rohan_isaac@yahoo.com>",
     "Shojiro Shibayama",
     "jsburklund",
     "Zhimin Zhang <zhangzhimin.csu@gmail.com>",
