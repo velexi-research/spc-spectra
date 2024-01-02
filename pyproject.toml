@@ -1,0 +1,84 @@
+[tool.poetry]
+name = "spc-spectra"
+version = "0.5.0"
+description = ""
+license = "Apache-2.0"
+readme = "README.md"
+authors = [
+    "Rohan Isaac",
+    "Shojiro Shibayama",
+    "jsburklund",
+    "Zhimin Zhang <zhangzhimin.csu@gmail.com>",
+    "Nick Macro",
+    "Germain Hebert <germainhebert@ca.abb.com>",
+    "Kevin T. Chu <kevin@velexi.com>"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9,<4"
+numpy = "^1.26.2"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+black = "^23"
+flake8 = "<5.0.0"  # Unpin after compatibility with pytest-flake8 is fixed
+pre-commit = "^3"
+radon = "^6"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+pdoc = "^14"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7"
+pylint = "^3"
+pytest = "^7"
+pytest-cov = "^4"
+pytest-flake8 = "^1.1"
+pytest-xdist = "^3"
+tox = "^4"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra --doctest-modules --flake8 --cov --cov-report="
+testpaths = [
+    "src",
+    "tests"
+]
+doctest_optionflags = [
+    "NORMALIZE_WHITESPACE",
+    "IGNORE_EXCEPTION_DETAIL",
+    "ALLOW_UNICODE",
+    "ALLOW_BYTES",
+]
+norecursedirs = ["docs", "extras", "spikes"]
+
+[tool.coverage.run]
+source = ["src/"]
+
+[tool.coverage.report]
+omit = ["*/tests/*"]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = true
+envlist = py37, py38, py39, py310, py311
+
+[testenv]
+whitelist_externals = poetry
+commands =
+    poetry install -v
+    poetry run pytest -n auto --cov-report=term-missing
+"""
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
