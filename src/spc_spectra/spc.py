@@ -27,7 +27,7 @@ class File:
 
     Examples
     --------
-    >>> import spc
+    >>> import spc_spectra
     >>> ftir_1 = spc.File('/path/to/ftir.spc')
     """
 
@@ -139,7 +139,7 @@ class File:
             # split and join to remove multiple spaces
             try:
                 self.cmnt = ' '.join((self.fcmnt.replace('\x00', ' ')).split())
-            except:
+            except Exception:
                 self.cmnt = self.fcmnt
 
             # figure out type of file
@@ -353,7 +353,7 @@ class File:
                     sub_pos = sub_end
 
                     i += 1
-                except:
+                except Exception:
                     # zero indexed, set the total number of subfile
                     self.fnsub = i + 1
                     break
