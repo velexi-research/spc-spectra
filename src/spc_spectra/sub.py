@@ -183,10 +183,12 @@ class subFileOld:
                 y_int.append((
                     y_raw[i + 1] * (256**3) + y_raw[i] * (256**2) +
                     y_raw[i + 3] * (256) + y_raw[i + 2]))
-            # fix negative values by casting to np.int32 (signed int)
-            y_int = np.int32(y_int) / (2**(32 - exp))
 
-            self.y = y_int
+            # convert y-data to signed ints
+            y_int = np.array(y_int).astype('int32', copy=False)
+
+            # convert y-data to floats
+            self.y = y_int / (2**(32 - exp))
 
         # do stuff if subflgs
         # if 1 subfile changed
