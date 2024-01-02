@@ -1,7 +1,5 @@
 """
 Global functions, available to all classes
-
-author: Rohan Isaac
 """
 from __future__ import division, absolute_import, unicode_literals, print_function
 import struct
