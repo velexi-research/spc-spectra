@@ -1,14 +1,53 @@
 """
 Classes for reading subfile data segments
 """
+# --- Imports
 
+# Standard library
 from __future__ import division, absolute_import, unicode_literals, print_function
-
 import struct
+
+# External packages
 import numpy as np
 
-from .global_fun import read_subheader
 
+# --- Utility functions
+
+def read_subheader(subheader):
+    """
+    Return the subheader as a list
+
+    Parameters
+    ----------
+    subheader (string):
+        32 character string in the subheader format
+
+    Returns
+    -------
+    list:
+        10 item list with the following data members:
+        [0] subflgs
+        [1] subexp
+        [2] subindx
+        [3] subtime
+        [4] subnext
+        [5] subnois
+        [6] subnpts
+        [7] subscan
+        [8] subwlevel
+        [9] subresv
+    """
+
+    subhead_str = "<cchfffiif4s"
+    items = struct.unpack(subhead_str.encode('utf8'), subheader)
+
+    item_cpy = [ord(i) for i in items[:2]]
+    item_cpy += items[2:]
+
+    return item_cpy
+
+
+# --- subFile class
 
 class subFile:
     """
@@ -20,7 +59,6 @@ class subFile:
     x: x-data (optional)
     y: y-data
     y_int: integer y-data if y-data is not floating
-
     """
 
     def __init__(self, data, fnpts, fexp, txyxy, tsprec, tmulti):
@@ -112,7 +150,6 @@ class subFileOld:
     ----
     x: x-data (optional)
     y: y-data
-
     """
 
     def __init__(self, data, pts, fexp, txyxy):

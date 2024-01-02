@@ -1,19 +1,26 @@
 """
 Classes for reading data from Thermo Grams *.SPC files
 """
+# --- Imports
 
+# Standard library
 from __future__ import division, absolute_import, unicode_literals, print_function
 import struct
+
+# External packages
 import numpy as np
 
-from .sub import subFile, subFileOld
-from .global_fun import read_subheader, flag_bits
+# Local modules
+from .subfile import subFile, subFileOld, read_subheader
+from .utils import flag_bits
 
+
+# --- Classes
 
 class File:
     """
-    Starts loading the data from a .SPC spectral file using data from the
-    header. Stores all the attributes of a spectral file:
+    Start loading the data from a .SPC spectral file using data from the header. Store all
+    the attributes of a spectral file:
 
     Data
     ----
@@ -24,8 +31,7 @@ class File:
 
     Examples
     --------
-    >>> import spc_spectra
-    >>> ftir_1 = spc.File('/path/to/ftir.spc')
+    >>> spc_file = File('/path/to/ftir.spc')
     """
 
     # Format strings for various parts of the file
@@ -394,7 +400,7 @@ class File:
 
     def set_labels(self):
         """
-        Set the x, y, z axis labels using various information in file content
+        Set the x, y, z axis labels using various information in file content.
         """
 
         # --------------------------
@@ -506,7 +512,9 @@ class File:
                     self.zlabel = zl
 
     def set_exp_type(self):
-        """ Sets the experiment type """
+        """
+        Set the experiment type.
+        """
 
         fexper_op = ["General SPC",
                      "Gas Chromatogram",
@@ -529,8 +537,9 @@ class File:
     # output
     # ------------------------------------------------------------------------
     def data_txt(self, delimiter='\t', newline='\n'):
-        """ Returns x,y column data as a string variable, can be printed to
-        standard output or fed to text file.
+        r"""
+        Returns x,y column data as a string variable, can be printed to standard output or
+        fed to text file.
 
         Arguments
         ---------
@@ -541,8 +550,8 @@ class File:
 
         Example
         -------
-        >>> f.data_txt(newline='\r\n')
-
+        >>> spc_file = File('/path/to/ftir.spc')
+        >>> spc_file.data_txt(newline='\r\n')
         """
 
         dat = ''
@@ -573,7 +582,8 @@ class File:
         return dat
 
     def write_file(self, path, delimiter='\t', newline='\n'):
-        """ Output x,y data to text file tab seperated
+        """
+        Output x, y data to tab-separated text file.
 
         Arguments
         ---------
@@ -586,14 +596,16 @@ class File:
 
         Example
         -------
-        >>> f.writefile('/Users/home/output.txt', delimiter=',')
-
+        >>> spc_file = File('/path/to/ftir.spc')
+        >>> spc_file.writefile('/Users/home/output.txt', delimiter=',')
         """
         with open(path, 'w') as f:
             f.write(self.data_txt(delimiter, newline))
 
     def print_metadata(self):
-        """ Print out select metadata"""
+        """
+        Print out select metadata.
+        """
         print("Scan: ", self.log_dict['Comment'], "\n",
               float(self.log_dict['Start']), "to ",
               float(self.log_dict['End']), "; ",
@@ -601,14 +613,15 @@ class File:
               float(self.log_dict['Integration Time']), "s integration time")
 
     def plot(self):
-        """ Plots data, and use column headers, returns figure object plotted
+        """
+        Plot data and return figure object.
 
         Requires matplotlib installed
 
         Example
         -------
-        >>> f.plot()
-
+        >>> spc_file = File('/path/to/ftir.spc')
+        >>> spc_file.plot()
         """
         import matplotlib.pyplot as plt
         if self.dat_fmt.endswith('-xy'):
@@ -624,13 +637,12 @@ class File:
 
     def debug_info(self):
         """
-        Interpret flags and header information to debug more about the file
-        format
+        Print debugging information extracted from flags and header information.
 
         Example
         -------
-
-        >>> f.debug_info()
+        >>> spc_file = File('/path/to/ftir.spc')
+        >>> spc_file.debug_info()
         """
         print("\nDEBUG INFO\nFlags:\n")
         # Flag bits
