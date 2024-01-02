@@ -1,8 +1,5 @@
 """
-spc class: main class that starts loading data from Thermo Grams *.SPC
-file
-
-author: Rohan Isaac
+Classes for reading data from Thermo Grams *.SPC files
 """
 
 from __future__ import division, absolute_import, unicode_literals, print_function

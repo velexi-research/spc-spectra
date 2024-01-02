@@ -1,7 +1,5 @@
 """
-SubFile class: loads each subfile data segment into object
-
-author: Rohan Isaac
+Classes for reading subfile data segments
 """
 
 from __future__ import division, absolute_import, unicode_literals, print_function
