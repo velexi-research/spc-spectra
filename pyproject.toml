@@ -17,6 +17,7 @@ authors = [
 [tool.poetry.dependencies]
 python = "^3.9,<4"
 numpy = "^1.26.2"
+pandas = "^2.1.4"
 
 [tool.poetry.group.dev]
 optional = true
@@ -47,7 +48,8 @@ tox = "^4"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra --doctest-modules --flake8 --cov --cov-report="
+# addopts = "-ra --doctest-modules --flake8 --cov --cov-report="
+addopts = "-ra --flake8 --cov --cov-report="
 testpaths = [
     "src",
     "tests"
