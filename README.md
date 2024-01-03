@@ -1,4 +1,19 @@
-# spc
+# spc-spectra
+
+--------------------------------------------------------------------------------------------
+
+__Note__: The original `spc-spectra` repositories maintained by Rohan Issac and Nick Macro
+appear to be inactive. This fork is intended to provide minor updates to
+
+* fix installation issues,
+
+* improve code structure, and
+
+* add automated testing.
+
+Contributions are welcome!
+
+--------------------------------------------------------------------------------------------
 
 [----------------------------- BADGES: BEGIN -----------------------------]: #
 
