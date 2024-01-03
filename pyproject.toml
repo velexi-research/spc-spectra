@@ -15,7 +15,7 @@ authors = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9,<4"
+python = "^3.8,<4"
 numpy = "^1.26.2"
 pandas = "^2.1.4"
 
