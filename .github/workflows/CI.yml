@@ -162,7 +162,7 @@ jobs:
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: docs/pxrd-tools
+          path: docs/spc-spectra
 
   deploy-docs:
     name: Deploy Documentation
