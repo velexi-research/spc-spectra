@@ -48,7 +48,7 @@ class test_spc_spectra(unittest.TestCase):
         Test File.data_txt() method.
         """
         # Loop over test data files
-        for filename in glob("*.[Ss][Pp][Cc]", root_dir=self.test_data_dir):
+        for filename in glob(os.path.join(self.test_data_dir, "*.[Ss][Pp][Cc]")):
             # Load data from SPC file
             spc_file = spc.File(os.path.join(self.test_data_dir, filename))
             data = pd.read_csv(StringIO(spc_file.data_txt()), engine="python", sep=None)
