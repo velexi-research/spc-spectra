@@ -15,9 +15,15 @@ for i in os.listdir(dpath):
         tfile += 1
         print(i)
         f1 = spc.File(os.path.join(dpath, i))
-        outfile = os.path.join(dpath, 'txt2', i + '.txt')
+        #outfile = os.path.join(dpath, 'txt2', i + '.txt')
+        outfile = os.path.join(dpath, i + '.txt')
         with open(outfile, 'r') as fin:
             dat = fin.read()
+            print(outfile)
+            print("TXT")
+            print(dat)
+            print("SPC")
+            print(f1.data_txt())
             if f1.data_txt() == dat:
                 print("Pass\n------")
                 tpass += 1
