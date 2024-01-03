@@ -1,6 +1,35 @@
 # spc
 
-[![Build Status](https://travis-ci.org/rohanisaac/spc.svg?branch=master)](https://travis-ci.org/rohanisaac/spc)
+[----------------------------- BADGES: BEGIN -----------------------------]: #
+
+<table>
+  <tr>
+    <td>Documentation</td>
+    <td>
+      <a href="https://velexi-research.github.io/spc-spectra/dev/"><img style="vertical-align: bottom;" src="https://img.shields.io/badge/docs-dev-blue.svg"/></a>
+      <a href="https://velexi-research.github.io/spc-spectra/stable/"><img style="vertical-align: bottom;" src="https://img.shields.io/badge/docs-stable-blue.svg"/></a>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Build Status</td>
+    <td>
+      <a href="https://github.com/velexi-research/spc-spectra/actions/workflows/CI.yml"><img style="vertical-align: bottom;" src="https://github.com/velexi-research/spc-spectra/actions/workflows/CI.yml/badge.svg"/></a>
+      <a href="https://codecov.io/gh/velexi-research/spc-spectra">
+        <img style="vertical-align: bottom;" src="https://codecov.io/gh/velexi-research/spc-spectra/branch/main/graph/badge.svg"/></a>
+    </td>
+  </tr>
+
+  <!-- Miscellaneous Badges -->
+  <tr>
+    <td colspan=2 align="center">
+      <a href="https://github.com/velexi-research/spc-spectra/issues"><img style="vertical-align: bottom;" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/></a>
+      <a href="https://github.com/psf/black"><img style="vertical-align: bottom;" src="https://img.shields.io/badge/code%20style-black-000000.svg"/></a>
+    </td>
+  </tr>
+</table>
+
+[------------------------------ BADGES: END ------------------------------]: #
 
 A module for working with .SPC files in Python. SPC is a binary data format to store a variety of spectral data, developed by Galactic Industries Corporation in the '90s. Popularly used Thermo Fisher/Scientific software GRAMS/AI. Also used by others including Ocean Optics, Jobin Yvon Horiba. Can store a variety of spectrum including FT-IR, UV-VIS, X-ray Diffraction, Mass Spectroscopy, NMR, Raman and Fluorescence spectra.
 
