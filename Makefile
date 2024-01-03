@@ -8,8 +8,8 @@ SRC_DIR=src
 CODE_DIRS=${SRC_DIR} tests
 
 # Package directories
-PKG_DIR=src/pxrd_tools
-DOCS_DIR=docs/pxrd-tools
+PKG_DIR=src/spc_spectra
+DOCS_DIR=docs/spc-spectra
 
 # Testing parameters
 NPROCS=auto
