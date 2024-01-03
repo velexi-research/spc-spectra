@@ -60,7 +60,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.local
-          key: dotlocal-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('.github/workflows/CI.yml') }}
+          key: ${{ github.repository }}-${{ github.workflow }}-${{ github.job }}-dotlocal-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('.github/workflows/CI.yml') }}
 
       - name: Install Python poetry
         uses: snok/install-poetry@v1
@@ -76,7 +76,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ github.repository }}-${{ github.workflow }}-${{ github.job }}-venv-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: Install package dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
