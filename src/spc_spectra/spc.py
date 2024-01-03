@@ -6,6 +6,7 @@ Classes for reading data from Thermo Grams *.SPC files
 # Standard library
 from __future__ import division, absolute_import, unicode_literals, print_function
 import struct
+import logging
 
 # External packages
 import numpy as np
@@ -13,6 +14,11 @@ import numpy as np
 # Local package
 from .subfile import subFile, subFileOld, read_subheader
 from .utils import flag_bits
+
+
+# --- Constants
+
+_LOGGER = logging.getLogger(__name__)
 
 
 # --- Classes
@@ -159,7 +165,7 @@ class File:
                 # no x values are given, but they can be generated
                 self.dat_fmt = 'gx-y'
 
-            print('{}({})'.format(self.dat_fmt, self.fnsub))
+            _LOGGER.info('{}({})'.format(self.dat_fmt, self.fnsub))
 
             sub_pos = self.head_siz
 
@@ -363,7 +369,7 @@ class File:
 
             # assuming it can't have separate x values
             self.dat_fmt = 'gx-y'
-            print('{}({})'.format(self.dat_fmt, self.fnsub))
+            _LOGGER.info('{}({})'.format(self.dat_fmt, self.fnsub))
 
             self.fxtype = ord(self.fxtype)
             self.fytype = ord(self.fytype)
