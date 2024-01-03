@@ -9,7 +9,8 @@ appear to be inactive. This fork is intended to provide minor updates to
 
 * improve code structure, and
 
-* add automated testing.
+* add basic software development and maintenance infrastructure (e.g., automated testing,
+  continuous integration).
 
 Contributions are welcome!
 
