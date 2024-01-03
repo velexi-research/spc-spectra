@@ -1,16 +1,8 @@
 #!/usr/bin/env python
+"""
+This setup script provides support for legacy tools that don't support pyproject.toml.
+"""
+from setuptools import setup
 
-from distutils.core import setup
-
-import spc
-
-setup(name='spc-spectra',
-      version=spc.__version__,
-      description=spc.__doc__,
-      author=spc.__author__,
-      author_email=spc.__author_email__,
-      url='https://github.com/NickMacro/spc-spectra',
-      download_url='https://github.com/NickMacro/spc-spectra/archive/0.4.0.tar.gz',
-      packages=['spc-spectra'],
-      classifiers=[],
-      )
+if __name__ == "__main__":
+    setup()

@@ -1,0 +1,199 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags: '*'
+
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+concurrency:
+  # Skip intermediate builds: always.
+  # Cancel intermediate builds: only if it is a pull request build.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  run-tests:
+    name: Python ${{ matrix.python-version }} (${{ matrix.os }}, ${{ matrix.arch }})
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os: [ubuntu-latest]
+        arch: [x64]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+
+
+    defaults:
+      run:
+        shell: bash
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+        codecov-arch: x64
+        codecov-version: "3.11"
+
+    steps:
+
+      # --- Check out code and setup Python
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # --- Install Poetry
+
+      - name: Load cached $HOME/.local
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: dotlocal-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('.github/workflows/CI.yml') }}
+
+      - name: Install Python poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      # --- Install package dependencies
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ runner.arch }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install package dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with test
+
+      # --- Run tests
+
+      - name: Run tests
+        run: |
+          source $VENV
+          poetry run pytest --cov-report=xml
+
+      # --- Upload coverage reports
+
+      - name: Upload coverage reports to Codecov
+        # Only run for 'main' branch running on 'Linux' with the latest version of Python
+        if: |
+            github.ref_name == 'main' &&
+            runner.os == 'Linux' &&
+            matrix.arch == env.codecov-arch &&
+            matrix.python-version == env.codecov-version
+
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: true
+
+  build-docs:
+    name: Build Documentation
+
+    runs-on: ubuntu-latest
+
+    env:
+      python-version: "3.11"
+
+    steps:
+      # --- Check out code and setup Python
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.python-version }}
+
+      # --- Install Poetry
+
+      - name: Load cached $HOME/.local
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: dotlocal-${{ runner.os }}-${{ runner.arch }}-${{ env.python-version }}-${{ hashFiles('.github/workflows/CI.yml') }}
+
+      - name: Install Python poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      # --- Install package dependencies
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-docs-${{ runner.os }}-${{ runner.arch }}-${{ env.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install package dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with docs
+
+      # --- Build documentation
+
+      - name: Build documentation
+        run: poetry run make docs
+
+      # --- Upload GitHub Pages artifact
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs/pxrd-tools
+
+  deploy-docs:
+    name: Deploy Documentation
+
+    if: github.ref_name == 'main'
+
+    needs: build-docs
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    env:
+      python-version: "3.11"
+
+    # Set permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      # --- Set up GitHub Pages
+
+      - name: Set up GitHub Pages
+        uses: actions/configure-pages@v3
+
+      # --- Deploy documentation
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
