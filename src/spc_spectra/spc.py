@@ -10,7 +10,7 @@ import struct
 # External packages
 import numpy as np
 
-# Local modules
+# Local package
 from .subfile import subFile, subFileOld, read_subheader
 from .utils import flag_bits
 
