@@ -1,6 +1,7 @@
 """
 Classes for reading subfile data segments
 """
+
 # --- Imports
 
 # Standard library
@@ -12,6 +13,7 @@ import numpy as np
 
 
 # --- Utility functions
+
 
 def read_subheader(subheader):
     """
@@ -39,7 +41,7 @@ def read_subheader(subheader):
     """
 
     subhead_str = "<cchfffiif4s"
-    items = struct.unpack(subhead_str.encode('utf8'), subheader)
+    items = struct.unpack(subhead_str.encode("utf8"), subheader)
 
     item_cpy = [ord(i) for i in items[:2]]
     item_cpy += items[2:]
@@ -48,6 +50,7 @@ def read_subheader(subheader):
 
 
 # --- subFile class
+
 
 class subFile:
     """
@@ -64,17 +67,18 @@ class subFile:
     def __init__(self, data, fnpts, fexp, txyxy, tsprec, tmulti):
 
         # extract subheader info
-        self.subflgs, \
-            self.subexp, \
-            self.subindx, \
-            self.subtime, \
-            self.subnext, \
-            self.subnois, \
-            self.subnpts, \
-            self.subscan, \
-            self.subwlevel, \
-            self.subresv \
-            = read_subheader(data[:32])
+        (
+            self.subflgs,
+            self.subexp,
+            self.subindx,
+            self.subtime,
+            self.subnext,
+            self.subnois,
+            self.subnpts,
+            self.subscan,
+            self.subwlevel,
+            self.subresv,
+        ) = read_subheader(data[:32])
 
         # header is 32 bytes
         y_dat_pos = 32
@@ -101,42 +105,50 @@ class subFile:
         # if x_data present
         # --------------------------
         if txyxy:
-            x_str = '<' + 'i' * pts
+            x_str = "<" + "i" * pts
             x_dat_pos = y_dat_pos
             x_dat_end = x_dat_pos + (4 * pts)
 
-            x_raw = np.array(struct.unpack(x_str.encode('utf8'), data[x_dat_pos:x_dat_end]))
-            self.x = (2**(exp - 32)) * x_raw
+            x_raw = np.array(
+                struct.unpack(x_str.encode("utf8"), data[x_dat_pos:x_dat_end])
+            )
+            self.x = (2 ** (exp - 32)) * x_raw
 
             y_dat_pos = x_dat_end
 
         # --------------------------
         # extract y_data
         # --------------------------
-        y_dat_str = '<'
+        y_dat_str = "<"
         if exp == 128:
             # Floating y-values
-            y_dat_str += 'f' * pts
+            y_dat_str += "f" * pts
             y_dat_end = y_dat_pos + (4 * pts)
-            y_raw = np.array(struct.unpack(y_dat_str.encode('utf8'), data[y_dat_pos:y_dat_end]))
+            y_raw = np.array(
+                struct.unpack(y_dat_str.encode("utf8"), data[y_dat_pos:y_dat_end])
+            )
             self.y = y_raw
         else:
             # integer format
             # lydata = len(data) - y_dat_pos
             if tsprec:
                 # 16 bit
-                y_dat_str += 'h' * pts  # short
+                y_dat_str += "h" * pts  # short
                 y_dat_end = y_dat_pos + (2 * pts)
-                y_raw = np.array(struct.unpack(y_dat_str.encode('utf8'), data[y_dat_pos:y_dat_end]))
-                self.y = (2**(exp - 16)) * y_raw
+                y_raw = np.array(
+                    struct.unpack(y_dat_str.encode("utf8"), data[y_dat_pos:y_dat_end])
+                )
+                self.y = (2 ** (exp - 16)) * y_raw
             else:
                 # 32 bit, using size of subheader to figure out data type
                 # actually there is flag for this, use it instead
                 # self.tsprec
-                y_dat_str += 'i' * pts
+                y_dat_str += "i" * pts
                 y_dat_end = y_dat_pos + (4 * pts)
-                y_raw = np.array(struct.unpack(y_dat_str.encode('utf8'), data[y_dat_pos:y_dat_end]))
-                self.y = (2**(exp - 32)) * y_raw
+                y_raw = np.array(
+                    struct.unpack(y_dat_str.encode("utf8"), data[y_dat_pos:y_dat_end])
+                )
+                self.y = (2 ** (exp - 32)) * y_raw
 
 
 class subFileOld:
@@ -157,17 +169,18 @@ class subFileOld:
         y_dat_pos = 32
 
         # extract subheader info
-        self.subflgs, \
-            self.subexp, \
-            self.subindx, \
-            self.subtime, \
-            self.subnext, \
-            self.subnois, \
-            self.subnpts, \
-            self.subscan, \
-            self.subwlevel, \
-            self.subresv \
-            = read_subheader(data[:y_dat_pos])
+        (
+            self.subflgs,
+            self.subexp,
+            self.subindx,
+            self.subtime,
+            self.subnext,
+            self.subnois,
+            self.subnpts,
+            self.subscan,
+            self.subwlevel,
+            self.subresv,
+        ) = read_subheader(data[:y_dat_pos])
 
         # assume it is an integer unless told otherwise
         yfloat = False
@@ -186,12 +199,14 @@ class subFileOld:
         # --------------------------
 
         if txyxy:
-            x_str = 'i' * pts
+            x_str = "i" * pts
             x_dat_pos = y_dat_pos
             x_dat_end = x_dat_pos + (4 * pts)
 
-            x_raw = np.array(struct.unpack(x_str.encode('utf8'), data[x_dat_pos:x_dat_end]))
-            self.x = (2**(exp - 32)) * x_raw
+            x_raw = np.array(
+                struct.unpack(x_str.encode("utf8"), data[x_dat_pos:x_dat_end])
+            )
+            self.x = (2 ** (exp - 32)) * x_raw
 
             y_dat_pos = x_dat_end
 
@@ -203,27 +218,30 @@ class subFileOld:
         y_dat_end = y_dat_pos + (4 * pts)
         if yfloat:
             # floats are pretty straigtfoward
-            y_dat_str = '<' + 'f' * pts
-            y_raw = struct.unpack(y_dat_str.encode('utf8'), data[y_dat_pos:y_dat_end])
+            y_dat_str = "<" + "f" * pts
+            y_raw = struct.unpack(y_dat_str.encode("utf8"), data[y_dat_pos:y_dat_end])
             self.y = y_raw
         else:
             # for old format, extract the entire array out as 1 bit unsigned
             # integers, swap 1st and 2nd byte, as well as 3rd and 4th byte to get
             # the final integer then scale by the exponent
-            y_dat_str = '>' + 'B' * 4 * pts
-            y_raw = struct.unpack(y_dat_str.encode('utf8'), data[y_dat_pos:y_dat_end])
+            y_dat_str = ">" + "B" * 4 * pts
+            y_raw = struct.unpack(y_dat_str.encode("utf8"), data[y_dat_pos:y_dat_end])
 
             y_int = []
             for i in range(0, len(y_raw), 4):
-                y_int.append((
-                    y_raw[i + 1] * (256**3) + y_raw[i] * (256**2) +
-                    y_raw[i + 3] * (256) + y_raw[i + 2]))
+                y_int.append(
+                    y_raw[i + 1] * (256**3)
+                    + y_raw[i] * (256**2)
+                    + y_raw[i + 3] * (256)
+                    + y_raw[i + 2]
+                )
 
             # convert y-data to signed ints
-            y_int = np.array(y_int).astype('int32', copy=False)
+            y_int = np.array(y_int).astype("int32", copy=False)
 
             # convert y-data to floats
-            self.y = y_int / (2**(32 - exp))
+            self.y = y_int / (2 ** (32 - exp))
 
         # do stuff if subflgs
         # if 1 subfile changed
