@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spc-spectra"
-version = "0.5.0"
+version = "0.6.0"
 description = "Python package for reading spectroscopic data stored in the SPC file format"
 license = "GPL-3.0-or-later"
 readme = "README.md"
@@ -16,15 +16,15 @@ authors = [
 
 [tool.poetry.dependencies]
 python = "^3.9,<4"
-numpy = "^1.26.2"
-pandas = "^2.1.4"
+numpy = "^2"
+pandas = "^2"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-black = "^23"
-flake8 = "<5.0.0"  # Unpin after compatibility with pytest-flake8 is fixed
+black = "^24"
+flake8 = "^7"
 pre-commit = "^3"
 radon = "^6"
 
@@ -40,16 +40,15 @@ optional = true
 [tool.poetry.group.test.dependencies]
 coverage = "^7"
 pylint = "^3"
-pytest = "^7"
-pytest-cov = "^4"
-pytest-flake8 = "^1.1"
+pytest = "^8"
+pytest-cov = "^5"
 pytest-xdist = "^3"
 tox = "^4"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-# addopts = "-ra --doctest-modules --flake8 --cov --cov-report="
-addopts = "-ra --flake8 --cov --cov-report="
+# addopts = "-ra --doctest-modules --cov --cov-report="
+addopts = "-ra --cov --cov-report="
 testpaths = [
     "src",
     "tests"
